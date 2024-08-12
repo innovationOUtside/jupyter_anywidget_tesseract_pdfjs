@@ -23,8 +23,9 @@ class tesseractPdfjsWidget(anywidget.AnyWidget):
     _esm = pathlib.Path(__file__).parent / "static" / "tesseract.js"
     _css = pathlib.Path(__file__).parent / "static" / "tesseract.css"
 
-    #test = traitlets.Int(0).tag(sync=True)
+    # test = traitlets.Int(0).tag(sync=True)
     url = traitlets.Unicode("").tag(sync=True)
+    pdf = traitlets.Unicode("").tag(sync=True)
     test_url = traitlets.Unicode("https://tesseract.projectnaptha.com/img/eng_bw.png").tag(sync=True) # TO DO - should be read only
     # b64 = traitlets.Bytes(b"").tag(sync=True)
     datauri = traitlets.Unicode("").tag(sync=True)

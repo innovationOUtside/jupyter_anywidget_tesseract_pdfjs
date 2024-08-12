@@ -27,7 +27,7 @@ async function recognizeTextFromImage(imageUrl) {
 }
 
 function render({ model, el }) {
-  function updateOCR(src = "") {
+  function updateOCR(src = "", n=1) {
     ocr_status.innerHTML = "RUNNING tesseract.js OCR...";
     model.set("extracted", "TRYING...");
     model.save_changes();
@@ -36,10 +36,6 @@ function render({ model, el }) {
         .then((text) => {
           //model.set("extracted", text);
           const pagedata = model.get("pagedata");
-          const count_pattern = /^p\d+$/;
-          const n =
-            Object.keys(pagedata).filter((key) => count_pattern.test(key))
-              .length + 1;
           const k = "p" + n;
           model.set("pagedata", { ...pagedata, [k]: text });
           model.set("extracted", text);
@@ -125,10 +121,22 @@ function render({ model, el }) {
   });
 
 
-  async function processFile(file) {
+async function getFileFromUrl(url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new File([blob], url.split("/").pop(), { type: blob.type });
+}
+  async function processFile(input) {
     dropzone.classList.add("disabled");
     fileSelectionAllowed = false;
     const history = model.get("history");
+    let file = null;
+    if (input instanceof File) {
+      // Input is a File object from browser upload
+      file = input;
+    } else {
+      file = await getFileFromUrl(input);
+    }
     model.set("history", [...history, file.type + ": " + file.name]);
     if (file.type === "application/pdf") {
       const { numPages, imageIterator } = await convertPDFToImages(file);
@@ -144,8 +152,8 @@ function render({ model, el }) {
         fileSelectionAllowed = false;
         displayImage(el, imageURL, true);
         dropzone.innerText = `Processing page ${n} of ${numPages}`;
+        updateOCR(imageURL, n);
         n = n + 1;
-        updateOCR(imageURL);
       }
 
       dropzone.classList.remove("disabled");
@@ -165,7 +173,7 @@ function render({ model, el }) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.worker.min.mjs";
 
-  async function convertPDFToImages(file, filetyp = true) {
+  async function convertPDFToImages(file) {
     // returns { numPages, imageIterator }
     const pdf = await pdfjsLib.getDocument(URL.createObjectURL(file)).promise;
 
@@ -231,7 +239,7 @@ function render({ model, el }) {
     model.save_changes();
     dropzone.innerText = "Processing file...";
     if (model.get("pdf")) {
-      //convertPDFToImages(model.get("pdf"));
+      processFile(model.get("pdf"));
     }
   });
 }
