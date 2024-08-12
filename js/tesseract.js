@@ -60,6 +60,61 @@ function render({ model, el }) {
   el2.id = uuid;
   el.appendChild(el2);
 
+  const dropzone = document.querySelector('div[title="dropzone"]');
+  const fileInput = document.querySelector('[name="fileInput"]');
+
+  dropzone.addEventListener("dragover", handleDragOver);
+  dropzone.addEventListener("dragleave", handleDragLeave);
+  dropzone.addEventListener("drop", handleDrop);
+  dropzone.addEventListener("click", handleClick);
+
+  let fileSelectionAllowed = true;
+
+  async function handleDragOver(event) {
+    event.preventDefault();
+    if (fileSelectionAllowed) {
+      dropzone.classList.add("drag-over");
+    }
+  }
+
+  async function handleDragLeave(event) {
+    event.preventDefault();
+    if (fileSelectionAllowed) {
+      dropzone.classList.remove("drag-over");
+    }
+  }
+
+  async function handleDrop(event) {
+    event.preventDefault();
+    if (fileSelectionAllowed) {
+      dropzone.classList.remove("drag-over");
+      const file = event.dataTransfer.files[0];
+      fileInput.files = event.dataTransfer.files;
+      processFile(file);
+    }
+  }
+
+  async function handleClick() {
+    if (fileSelectionAllowed) {
+      fileInput.click();
+    }
+  }
+
+  fileInput.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    processFile(file);
+  });
+
+  function processFile(file) {
+    dropzone.classList.add("disabled");
+    fileSelectionAllowed = false;
+    const imageURL = URL.createObjectURL(file);
+    displayImage(el, imageURL);
+    updateOCR(imageURL);
+    dropzone.classList.remove("disabled");
+    fileSelectionAllowed = true;
+  }
+
   model.on("change:url", () => {
     model.set("test", model.get("test") + 1);
     model.set("extracted", "WAITING...");
