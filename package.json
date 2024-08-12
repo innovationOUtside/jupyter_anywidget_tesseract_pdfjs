@@ -1,0 +1,12 @@
+{
+	"scripts": {
+		"dev": "npm run build -- --sourcemap=inline --watch",
+		"build": "esbuild js/*.js --minify --format=esm --bundle --outdir=src/jupyter_anywidget_tesseract_pdfjs/static --loader:.html=text"
+	},
+	"dependencies": {
+		"tesseract.js": "^5.1.0"
+	},
+	"devDependencies": {
+		"esbuild": "^0.23.0"
+	}
+}
