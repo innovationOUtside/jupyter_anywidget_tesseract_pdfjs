@@ -28,6 +28,14 @@ async function recognizeTextFromImage(imageUrl) {
   }
 }
 
+async function displayImage(el, imageURL) {
+  const imgContainer = el.querySelector(".image-container");
+  imgContainer.innerHTML = "";
+  const imgElement = document.createElement("img");
+  imgElement.src = imageURL;
+  imgContainer.appendChild(imgElement);
+}
+
 function render({ model, el }) {
   function updateOCR(src = "") {
     model.set("extracted", "TRYING...");
@@ -56,6 +64,7 @@ function render({ model, el }) {
     model.set("test", model.get("test") + 1);
     model.set("extracted", "WAITING...");
     if (model.get("url")) {
+      displayImage(el, model.get("url"));
       updateOCR(model.get("url"));
     }
     model.save_changes();
@@ -65,10 +74,10 @@ function render({ model, el }) {
     model.set("test", model.get("test") + 1);
     model.set("extracted", "WAITING...");
     if (model.get("datauri")) {
+      displayImage(el, model.get("datauri"));
       updateOCR(model.get("datauri"));
     }
   });
-  model.save_changes();
 }
 
 export default { render };
