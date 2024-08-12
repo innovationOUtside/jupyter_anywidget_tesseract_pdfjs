@@ -22,9 +22,10 @@ class tesseractPdfjsWidget(anywidget.AnyWidget):
 
     test = traitlets.Int(0).tag(sync=True)
     url = traitlets.Unicode("").tag(sync=True)
-    #test_url = traitlets.Unicode("https://tesseract.projectnaptha.com/img/eng_bw.png").tag(sync=True) # TO DO - should be read only
-    #b64 = traitlets.Bytes(b"").tag(sync=True)
-    #lang = traitlets.Unicode("eng").tag(sync=True)
+    test_url = traitlets.Unicode("https://tesseract.projectnaptha.com/img/eng_bw.png").tag(sync=True) # TO DO - should be read only
+    # b64 = traitlets.Bytes(b"").tag(sync=True)
+    datauri = traitlets.Unicode("").tag(sync=True)
+    lang = traitlets.Unicode("eng").tag(sync=True)
     extracted = traitlets.Unicode("").tag(sync=True)
 
     def set_url(self, value):

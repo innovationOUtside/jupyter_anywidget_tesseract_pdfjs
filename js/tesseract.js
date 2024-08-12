@@ -29,6 +29,23 @@ async function recognizeTextFromImage(imageUrl) {
 }
 
 function render({ model, el }) {
+  function updateOCR(src = "") {
+    model.set("extracted", "TRYING...");
+    model.save_changes();
+    if (src) {
+      recognizeTextFromImage(src, model.get("lang"))
+        .then((text) => {
+          model.set("extracted", text);
+          model.save_changes();
+        })
+        .catch((error) => {
+          console.error("Recognition failed:", error);
+          model.set("extracted", error);
+          model.save_changes();
+        });
+    }
+  }
+
   let el2 = document.createElement("div");
   el2.innerHTML = html;
   const uuid = generateUUID();
@@ -36,23 +53,22 @@ function render({ model, el }) {
   el.appendChild(el2);
 
   model.on("change:url", () => {
-    model.set("test", model.get("test")+1)
+    model.set("test", model.get("test") + 1);
     model.set("extracted", "WAITING...");
-    //"https://tesseract.projectnaptha.com/img/eng_bw.png"
     if (model.get("url")) {
-        model.set("extracted", "TTRYING...");
-      recognizeTextFromImage(model.get("url"))
-        .then((text) => {
-          model.set("extracted", text);
-          model.save_changes();
-        })
-        .catch((error) => {
-            model.set("extracted", "ERROR"+error);
-            model.save_changes();
-        });
+      updateOCR(model.get("url"));
     }
-
+    model.save_changes();
   });
+
+  model.on("change:datauri", () => {
+    model.set("test", model.get("test") + 1);
+    model.set("extracted", "WAITING...");
+    if (model.get("datauri")) {
+      updateOCR(model.get("datauri"));
+    }
+  });
+  model.save_changes();
 }
 
 export default { render };
