@@ -3,6 +3,9 @@ import pathlib
 
 import anywidget
 import traitlets
+import requests
+
+from .utils import image_to_data_uri
 
 try:
     __version__ = importlib.metadata.version("jupyter_anywidget_tesseract_pdfjs")
@@ -20,16 +23,25 @@ class tesseractPdfjsWidget(anywidget.AnyWidget):
     _esm = pathlib.Path(__file__).parent / "static" / "tesseract.js"
     _css = pathlib.Path(__file__).parent / "static" / "tesseract.css"
 
-    test = traitlets.Int(0).tag(sync=True)
+    #test = traitlets.Int(0).tag(sync=True)
     url = traitlets.Unicode("").tag(sync=True)
     test_url = traitlets.Unicode("https://tesseract.projectnaptha.com/img/eng_bw.png").tag(sync=True) # TO DO - should be read only
     # b64 = traitlets.Bytes(b"").tag(sync=True)
     datauri = traitlets.Unicode("").tag(sync=True)
     lang = traitlets.Unicode("eng").tag(sync=True)
     extracted = traitlets.Unicode("").tag(sync=True)
+    pagedata = traitlets.Dict().tag(sync=True)
+    history = traitlets.List([]).tag(sync=True)
 
     def set_url(self, value):
-        self.url = value
+        # HACKY - need a better pdf detect
+        if value.split(".")[-1].lower()=="pdf":
+            self.pdf = value
+        else:
+            self.url = value
+
+    def set_datauri(self, path):
+        self.datauri = image_to_data_uri(path)
 
 from .magics import TesseractMagic
 

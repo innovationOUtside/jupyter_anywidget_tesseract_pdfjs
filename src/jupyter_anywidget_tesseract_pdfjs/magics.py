@@ -1,17 +1,16 @@
-from IPython.core.magic import Magics, magics_class, cell_magic
-
+from IPython.core.magic import Magics, magics_class, line_magic
 
 @magics_class
 class TesseractMagic(Magics):
     def __init__(self, shell):
         super(TesseractMagic, self).__init__(shell)
 
-    @cell_magic
-    def tesseract_magic(self, line, cell):
-        obj_name = line.strip()
-        if cell:
-            w = self.shell.user_ns[obj_name]
-            w.set_code_content(cell)
+    @line_magic
+    def tesseract_magic(self, line):
+        items = [s for s in line.strip().split() if s]
+        if line:
+            w = self.shell.user_ns[items[0]]
+            w.set_code_content(items[1])
             # The w.response is the previous state so we can't return it
 
 

@@ -4,6 +4,7 @@
 		"build": "esbuild js/*.js --minify --format=esm --bundle --outdir=src/jupyter_anywidget_tesseract_pdfjs/static --loader:.html=text"
 	},
 	"dependencies": {
+		"pdfjs-dist": "^4.5.136",
 		"tesseract.js": "^5.1.0"
 	},
 	"devDependencies": {
