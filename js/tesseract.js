@@ -117,7 +117,7 @@ function render({ model, el }) {
 
   model.on("change:url", () => {
     model.set("test", model.get("test") + 1);
-    model.set("extracted", "WAITING...");
+    model.set("extracted", "PROCESSING...");
     if (model.get("url")) {
       displayImage(el, model.get("url"));
       updateOCR(model.get("url"));
@@ -127,7 +127,7 @@ function render({ model, el }) {
 
   model.on("change:datauri", () => {
     model.set("test", model.get("test") + 1);
-    model.set("extracted", "WAITING...");
+    model.set("extracted", "PROCESSING...");
     if (model.get("datauri")) {
       displayImage(el, model.get("datauri"));
       updateOCR(model.get("datauri"));
