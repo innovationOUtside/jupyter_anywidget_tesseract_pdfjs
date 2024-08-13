@@ -34,6 +34,8 @@ You can then drag and drop an image file or PDF file onto the landing area or lo
 
 ![Load in widget from code, display in panel](images/widget_loading.png)
 
+![Load in widget from code, display in panel, ocr passed image](images/widget_loading_ocr.png)
+
 | Filetype  | Local file  | Web URL |
 |---|---|---|
 | Image  | File drag / select; `widget.set_datauri(?)` | `widget.url=?`, `widget.set_url(?)`, `widget.set_datauri(?)` |
