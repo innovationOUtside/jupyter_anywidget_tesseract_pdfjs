@@ -64,7 +64,7 @@ We can also review the extracted text for the last processed image: `t.extracted
 
 Review a history of files that have been processed: `t.history`
 
-### Exanples
+### Examples
 
 *See also the notebooks in `examples`.*
 
