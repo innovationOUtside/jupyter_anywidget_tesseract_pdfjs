@@ -77,7 +77,7 @@ t.set_datauri(image_url)
 
 #New cell
 # We also need to "manually" wait for processing to finish
-# before trying to imspect the retrieved data
+# before trying to inspect the retrieved data
 t.pagedata
 ```
 
@@ -92,7 +92,7 @@ t.set_url(image_url)
 
 #New cell
 # We also need to "manually" wait for processing to finish
-# before trying to imspect the retrieved data
+# before trying to inspect the retrieved data
 t.pagedata
 ```
 
@@ -114,7 +114,7 @@ t.set_datauri(local_image)
 
 #New cell
 # We also need to "manually" wait for processing to finish
-# before trying to imspect the retrieved data
+# before trying to inspect the retrieved data
 t.pagedata
 ```
 
