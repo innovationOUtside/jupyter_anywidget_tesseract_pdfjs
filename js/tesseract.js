@@ -27,8 +27,7 @@ async function recognizeTextFromImage(imageUrl) {
 }
 
 function render({ model, el }) {
-  function updateOCR(src = "", n=1) {
-    ocr_status.innerHTML = "RUNNING tesseract.js OCR...";
+  function updateOCR(src = "", n = 1) {
     model.set("extracted", "TRYING...");
     model.save_changes();
     if (src) {
@@ -37,7 +36,11 @@ function render({ model, el }) {
           //model.set("extracted", text);
           const pagedata = model.get("pagedata");
           const k = "p" + n;
-          model.set("pagedata", { ...pagedata, [k]: text });
+          model.set("pagedata", {
+            ...pagedata,
+            [k]: text,
+            processed: (pagedata.processed || 0) + 1,
+          });
           model.set("extracted", text);
           model.save_changes();
           dropzone.innerText = `Processed file...`;
@@ -55,7 +58,6 @@ function render({ model, el }) {
           fileSelectionAllowed = true;
         });
     }
-    ocr_status.innerHTML = "";
   }
 
   let el2 = document.createElement("div");
@@ -67,7 +69,6 @@ function render({ model, el }) {
   const desiredWidth = 1000;
   const dropzone = el.querySelector('div[title="dropzone"]');
   const fileInput = el.querySelector('[name="fileInput"]');
-  const ocr_status = el.querySelector('[name="ocr_status"]');
   const imgContainer = el.querySelector(".image-container");
   const originalText = dropzone.innerText;
 
@@ -120,12 +121,12 @@ function render({ model, el }) {
     processFile(file);
   });
 
+  async function getFileFromUrl(url) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], url.split("/").pop(), { type: blob.type });
+  }
 
-async function getFileFromUrl(url) {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return new File([blob], url.split("/").pop(), { type: blob.type });
-}
   async function processFile(input) {
     dropzone.classList.add("disabled");
     fileSelectionAllowed = false;
@@ -144,7 +145,11 @@ async function getFileFromUrl(url) {
         numPages > 1 ? "s" : ""
       }`;
       let n = 1;
-      model.set("pagedata", { typ: "pdf", pages: numPages, name: file.name });
+      model.set("pagedata", {
+        typ: "pdf",
+        pages: numPages,
+        name: file.name,
+      });
       model.save_changes();
 
       for await (const { imageURL } of imageIterator) {
@@ -159,7 +164,11 @@ async function getFileFromUrl(url) {
       dropzone.classList.remove("disabled");
       fileSelectionAllowed = true;
     } else {
-      model.set("pagedata", { typ: file.type, name: file.name });
+      model.set("pagedata", {
+        typ: file.type,
+        pages: 1,
+        name: file.name,
+      });
       model.save_changes();
       const imageURL = URL.createObjectURL(file);
       displayImage(el, imageURL, false);
@@ -206,40 +215,45 @@ async function getFileFromUrl(url) {
   }
 
   model.on("change:url", () => {
+    const url = model.get("url");
     model.set("extracted", "PROCESSING...");
     const history = model.get("history");
-    model.set("history", [...history, model.get("url")]);
-    model.set("pagedata", { typ: "url", url: model.get("url") });
+    model.set("history", [...history, url]);
+    model.set("pagedata", { typ: "url", location: url });
     model.save_changes();
     dropzone.innerText = "Processing file...";
-    if (model.get("url")) {
-      displayImage(el, model.get("url"));
+    if (url) {
+      displayImage(el, url);
       updateOCR(model.get("url"));
     }
   });
 
   model.on("change:datauri", () => {
+    const datauri = model.get("datauri");
+    const datauri_location = model.get("datauri_location");
     model.set("extracted", "PROCESSING...");
-    model.set("pagedata", { typ: "datauri" });
+    model.set("pagedata", { typ: "datauri", location: datauri_location });
+
     const history = model.get("history");
-    model.set("history", [...history, "datauri"]);
+    model.set("history", [...history, `datauri::${datauri_location}`]);
     model.save_changes();
     dropzone.innerText = "Processing file...";
-    if (model.get("datauri")) {
-      displayImage(el, model.get("datauri"));
+    if (datauri) {
+      displayImage(el, datauri);
       updateOCR(model.get("datauri"));
     }
   });
 
   model.on("change:pdf", () => {
+    const pdf = model.get("pdf");
     model.set("extracted", "PROCESSING...");
-    model.set("pagedata", { typ: "datauri" });
+    model.set("pagedata", { typ: `pdf::${pdf}` });
     const history = model.get("history");
-    model.set("history", [...history, "datauri"]);
+    model.set("history", [...history, `datauri::${pdf}`]);
     model.save_changes();
     dropzone.innerText = "Processing file...";
-    if (model.get("pdf")) {
-      processFile(model.get("pdf"));
+    if (pdf) {
+      processFile(pdf);
     }
   });
 }

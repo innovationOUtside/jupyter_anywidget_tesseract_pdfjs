@@ -18,6 +18,7 @@ class Widget(anywidget.AnyWidget):
     _css = pathlib.Path(__file__).parent / "static" / "widget.css"
     value = traitlets.Int(0).tag(sync=True)
 
+
 class tesseractPdfjsWidget(anywidget.AnyWidget):
     _deps = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
     _esm = pathlib.Path(__file__).parent / "static" / "tesseract.js"
@@ -26,25 +27,40 @@ class tesseractPdfjsWidget(anywidget.AnyWidget):
     # test = traitlets.Int(0).tag(sync=True)
     url = traitlets.Unicode("").tag(sync=True)
     pdf = traitlets.Unicode("").tag(sync=True)
-    test_url = traitlets.Unicode("https://tesseract.projectnaptha.com/img/eng_bw.png").tag(sync=True) # TO DO - should be read only
+    test_url = traitlets.Unicode(
+        "https://tesseract.projectnaptha.com/img/eng_bw.png"
+    ).tag(
+        sync=True
+    )  # TO DO - should be read only
     # b64 = traitlets.Bytes(b"").tag(sync=True)
     datauri = traitlets.Unicode("").tag(sync=True)
+    datauri_location = traitlets.Unicode("").tag(sync=True)
     lang = traitlets.Unicode("eng").tag(sync=True)
     extracted = traitlets.Unicode("").tag(sync=True)
     pagedata = traitlets.Dict().tag(sync=True)
     history = traitlets.List([]).tag(sync=True)
 
-    def set_url(self, value):
+    def set_url(self, value, force=False):
         # HACKY - need a better pdf detect
-        if value.split(".")[-1].lower()=="pdf":
+        if value.split(".")[-1].lower() == "pdf":
+            if force and value:
+                self.pdf = ""
             self.pdf = value
         else:
+            if force and value:
+                self.url = ""
             self.url = value
 
-    def set_datauri(self, path):
-        self.datauri = image_to_data_uri(path)
+    def set_datauri(self, path, force=False):
+        datauri, datauri_location = image_to_data_uri(path)
+        self.datauri_location = datauri_location
+        if force and path:
+            self.datauri = ""
+        self.datauri = datauri
+
 
 from .magics import TesseractMagic
+
 
 def load_ipython_extension(ipython):
     ipython.register_magics(TesseractMagic)

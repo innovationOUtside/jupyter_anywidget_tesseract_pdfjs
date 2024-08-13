@@ -4,9 +4,18 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jupyter_anywidget_tesseract_pdfjs"
-version = "0.0.2"
+version = "0.0.4"
 dependencies = ["anywidget", "puremagic"]
 readme = "README.md"
+authors = [
+    {name = "Tony Hirst", email = "tony.hirst@gmail.com"},
+]
+
+[project.urls]
+repository = "https://github.com/innovationOUtside/jupyter_anywidget_tesseract_pdfjs"
+
+[project.license]
+text = "Apache License"
 
 [project.optional-dependencies]
 dev = ["watchfiles", "jupyterlab"]
