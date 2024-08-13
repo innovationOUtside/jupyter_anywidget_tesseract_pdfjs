@@ -39,6 +39,8 @@ You can then drag and drop an image file or PDF file onto the landing area or lo
 | Image  | File drag / select; `widget.set_datauri(?)` | `widget.url=?`, `widget.set_url(?)`, `widget.set_datauri(?)` |
 |  PDF  |  File drag / select  | `widget.pdf=?`, `widget.set_url(?)`  |
 | Image Data URI | `widget.datauri=?` | N/A |
+| `matplotlib` axes object | `widget.set_datauri(ax)` | N/A |
+| IPython `Image` displayed object | `widget.set_datauri(_)` in next run cell | N/A |
 
 ### Accessing extracted text
 
