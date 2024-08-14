@@ -12,6 +12,8 @@ This reduces the number of Python dependencies that need to be installed on the 
 
 *I'm not much a packaging expert, so some assets are likely to be loaded from a URI; ideally, everything would be bundled into the `anywidget` extension.*
 
+Related blog post: [Jupyter tesseract/pdfjs anywidget — sideloaded OCR for Python environments](https://blog.ouseful.info/2024/08/14/jupyter-tesseract-pdfjs-anywidget-sideloaded-ocr-for-python-environments/)
+
 ## Installation
 
 `pip install jupyter_anywidget_tesseract_pdfjs`
