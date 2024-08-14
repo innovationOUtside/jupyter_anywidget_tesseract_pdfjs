@@ -137,8 +137,8 @@ Parse IPython `Image` display object:
 from IPython.display import Image
 Image(local_image)
 
-#NExt run cell
-t.set_datauri(image_url)
+#Next run cell
+t.set_datauri(_)
 ```
 
 Parse `matplotlib` axes object:
