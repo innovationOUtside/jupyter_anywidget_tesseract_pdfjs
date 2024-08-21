@@ -3,7 +3,6 @@ import pathlib
 
 import anywidget
 import traitlets
-import requests
 
 from .utils import image_to_data_uri
 
@@ -20,7 +19,6 @@ class Widget(anywidget.AnyWidget):
 
 
 class tesseractPdfjsWidget(anywidget.AnyWidget):
-    _deps = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
     _esm = pathlib.Path(__file__).parent / "static" / "tesseract.js"
     _css = pathlib.Path(__file__).parent / "static" / "tesseract.css"
 
@@ -104,3 +102,9 @@ def create_panel(widget_class):
 @create_panel
 def tesseract_panel(title=None, anchor=None):
     return tesseractPdfjsWidget()
+
+
+def tesseract_inline():
+    widget_ = tesseractPdfjsWidget()
+    display(widget_)
+    return widget_

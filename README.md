@@ -28,6 +28,10 @@ from jupyter_anywidget_tesseract_pdfjs import tesseract_panel
 t = tesseract_panel()
 #t = tesseract_panel("example panel title)
 #t = tesseract_panel(None, "split-bottom")
+
+# We can also render the widget into the output
+# of the initiating cell
+# t = tesseract_inline()
 ```
 
 This loads the widget by default into a new panel using [`jupyterlab_sidecar`](https://github.com/jupyter-widgets/jupyterlab-sidecar).

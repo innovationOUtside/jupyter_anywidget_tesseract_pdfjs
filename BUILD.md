@@ -12,6 +12,10 @@ Install packages:
 
 > `npm install`
 
+> `npm install --save pdfjs-dist`
+
+> `npm -nstall --save tesseract.js`
+
 Test build:
 
 > `npm run build`
