@@ -2,9 +2,9 @@
 
 Tesseract./ pdf.js [`anywidget`](https://github.com/manzt/anywidget) for previewing PDF and extracting text from PDF, image, etc. in JupyterLab
 
-Inspired by and building on @simonw's (Simon Willison) [OCR tool](https://github.com/simonw/tools/blob/main/ocr.html) [[about](https://simonwillison.net/2024/Mar/30/ocr-pdfs-images/)], use `tesseract.js` in a Jupyter notebook environment via an `anywidget` wrapper.
+Inspired by and building on @simonw's (Simon Willison) [OCR tool](https://github.com/simonw/tools/blob/main/ocr.html) [[about](https://simonwillison.net/2024/Mar/30/ocr-pdfs-images/)], use `tesseract.js` in a Jupyter notebook environment or VS Code notebook via an `anywidget` wrapper.
 
-Using the `anywidget` framework, we can essentially load Javascript and WASM models into a sidebar widget and use the widget for "side-processing" using the browser machinery.
+Using the `anywidget` framework, we can essentially load Javascript and WASM models into a sidebar widget and use the widget for "side-processing" using the browser / electron machinery.
 
 For example, we can use the [`tesseract.js`](https://tesseract.projectnaptha.com/) for OCR/text extraction on images, and [`pdf.js`](https://mozilla.github.io/pdf.js/) for converting PDF documents to images which can then be OCR'd using `tesseract.js`.
 
@@ -42,6 +42,8 @@ t = tesseract_panel()
 ```
 
 This loads the widget by default into a new panel using [`jupyterlab_sidecar`](https://github.com/jupyter-widgets/jupyterlab-sidecar).
+
+*For use in VS Code, use either `tesseract_inline()` or `tesseract_headless()`.*
 
 You can then drag and drop an image file or PDF file onto the landing area or load an image or path in from a notebook code cell.
 
