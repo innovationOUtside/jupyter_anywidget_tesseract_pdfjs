@@ -23,6 +23,7 @@ class tesseractPdfjsWidget(anywidget.AnyWidget):
     _css = pathlib.Path(__file__).parent / "static" / "tesseract.css"
 
     # test = traitlets.Int(0).tag(sync=True)
+    headless = traitlets.Bool(False).tag(sync=True)
     url = traitlets.Unicode("").tag(sync=True)
     pdf = traitlets.Unicode("").tag(sync=True)
     test_url = traitlets.Unicode(
@@ -37,6 +38,10 @@ class tesseractPdfjsWidget(anywidget.AnyWidget):
     extracted = traitlets.Unicode("").tag(sync=True)
     pagedata = traitlets.Dict().tag(sync=True)
     history = traitlets.List([]).tag(sync=True)
+
+    def __init__(self, headless=False,  **kwargs):
+        super().__init__(**kwargs)
+        self.headless = headless
 
     def set_url(self, value, force=False):
         # HACKY - need a better pdf detect
@@ -56,6 +61,10 @@ class tesseractPdfjsWidget(anywidget.AnyWidget):
             self.datauri = ""
         self.datauri = datauri
 
+def tesseract_headless():
+    widget_ = tesseractPdfjsWidget(headless=True)
+    display(widget_)
+    return widget_
 
 from .magics import TesseractMagic
 

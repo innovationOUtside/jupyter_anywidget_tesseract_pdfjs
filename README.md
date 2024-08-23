@@ -31,7 +31,14 @@ t = tesseract_panel()
 
 # We can also render the widget into the output
 # of the initiating cell
-# t = tesseract_inline()
+#from jupyter_anywidget_tesseract_pdfjs import tesseract_inline
+#t = tesseract_inline()
+
+# Alternatively, create a "headless" version
+# - does not display UI panel
+# - BUT still needs to be able to attach widget to DOM
+#from jupyter_anywidget_tesseract_pdfjs import tesseract_headless
+#t = tesseract_headless()
 ```
 
 This loads the widget by default into a new panel using [`jupyterlab_sidecar`](https://github.com/jupyter-widgets/jupyterlab-sidecar).

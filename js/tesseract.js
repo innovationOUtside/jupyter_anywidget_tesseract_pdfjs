@@ -60,10 +60,19 @@ function render({ model, el }) {
     }
   }
 
+  const _headless = model.get("headless");
+
   let el2 = document.createElement("div");
   el2.innerHTML = html;
   const uuid = generateUUID();
   el2.id = uuid;
+
+  // For the headless version,
+  // just suppress the visible display of the widget UI
+  if (_headless) {
+    el2.style = "display: none; visibility: hidden;";
+  }
+
   el.appendChild(el2);
 
   const desiredWidth = 1000;
