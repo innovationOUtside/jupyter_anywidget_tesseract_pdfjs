@@ -41,6 +41,8 @@ t = tesseract_panel()
 #t = tesseract_headless()
 ```
 
+If blocking calls are available (not JupyterLite), after creating the widget add `t.ready()` to block till things are ready. (Also accepts `timeout`, default 5 (s), set to `None` for pen ended.)
+
 This loads the widget by default into a new panel using [`jupyterlab_sidecar`](https://github.com/jupyter-widgets/jupyterlab-sidecar).
 
 *For use in VS Code, use either `tesseract_inline()` or `tesseract_headless()`.*
