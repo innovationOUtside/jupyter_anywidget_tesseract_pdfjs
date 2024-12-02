@@ -47,6 +47,10 @@ function render({ model, el }) {
 
           dropzone.innerText = originalText;
           dropzone.classList.remove("disabled");
+          
+          model.set("response", { status: "completed" });
+          model.save_changes();
+
         })
         .catch((error) => {
           console.error("Recognition failed:", error);
@@ -274,6 +278,9 @@ function render({ model, el }) {
       processFile(pdf);
     }
   });
+
+   model.set("response", { status: "ready" });
+   model.save_changes();
 }
 
 export default { render };

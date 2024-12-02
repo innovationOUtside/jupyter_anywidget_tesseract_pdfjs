@@ -59,6 +59,9 @@ You can then drag and drop an image file or PDF file onto the landing area or lo
 | `matplotlib` axes object | `widget.set_datauri(ax)` | N/A |
 | IPython `Image` displayed object | `widget.set_datauri(_)` in next run cell | N/A |
 
+
+Use `from_url(URL, force=False, timeout=None)` rather than `.set_url()` as a blocking call that returns the pagedata when it's ready.
+
 ### Accessing extracted text
 
 We can access extracted text via: `t.pagedata`
