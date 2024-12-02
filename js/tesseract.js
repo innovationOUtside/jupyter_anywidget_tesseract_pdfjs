@@ -131,9 +131,16 @@ function render({ model, el }) {
   });
 
   async function getFileFromUrl(url) {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new File([blob], url.split("/").pop(), { type: blob.type });
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new File([blob], url.split("/").pop(), { type: blob.type });
+    } catch (error) {
+      dropzone.innerText = `Loading file from CORS proxied URL...`;
+      const response = await fetch("https://corsproxy.io/?" + url);
+      const blob = await response.blob();
+      return new File([blob], url.split("/").pop(), { type: blob.type });
+    }
   }
 
   async function processFile(input) {
@@ -145,7 +152,9 @@ function render({ model, el }) {
       // Input is a File object from browser upload
       file = input;
     } else {
+      dropzone.innerText = `Loading file from URL...`;
       file = await getFileFromUrl(input);
+      dropzone.innerText = `File loaded from URL...`;
     }
     model.set("history", [...history, file.type + ": " + file.name]);
     if (file.type === "application/pdf") {
@@ -230,7 +239,7 @@ function render({ model, el }) {
     model.set("history", [...history, url]);
     model.set("pagedata", { typ: "url", location: url });
     model.save_changes();
-    dropzone.innerText = "Processing file...";
+    dropzone.innerText = `Processing url...`;
     if (url) {
       displayImage(el, url);
       updateOCR(model.get("url"));
@@ -246,7 +255,7 @@ function render({ model, el }) {
     const history = model.get("history");
     model.set("history", [...history, `datauri::${datauri_location}`]);
     model.save_changes();
-    dropzone.innerText = "Processing file...";
+    dropzone.innerText = `Processing datauri...`;
     if (datauri) {
       displayImage(el, datauri);
       updateOCR(model.get("datauri"));
@@ -258,9 +267,9 @@ function render({ model, el }) {
     model.set("extracted", "PROCESSING...");
     model.set("pagedata", { typ: `pdf::${pdf}` });
     const history = model.get("history");
-    model.set("history", [...history, `datauri::${pdf}`]);
+    model.set("history", [...history, `pdf::${pdf}`]);
     model.save_changes();
-    dropzone.innerText = "Processing file...";
+    dropzone.innerText = `Processing PDF...`;
     if (pdf) {
       processFile(pdf);
     }
