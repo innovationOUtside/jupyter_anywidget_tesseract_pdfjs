@@ -178,3 +178,8 @@ t.set_datauri(ax)
 View history of OCR lookups:
 
 `t.history`
+
+
+# Other (predominantly, ouseful) sideloading wasm anywidgets
+
+See the GitHup topc tag: [`jupyter-wasm-anywidget-extension`](https://github.com/topics/jupyter-wasm-anywidget-extension)
